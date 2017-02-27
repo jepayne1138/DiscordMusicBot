@@ -1,3 +1,4 @@
+import os
 import asyncio
 import discord
 from discord.ext import commands
@@ -271,4 +272,6 @@ bot.add_cog(Music(bot))
 async def on_ready():
     print('Logged in as:\n{0} (ID: {0.id})'.format(bot.user))
 
-bot.run(os.environ['DISCORD_MUSIC_BOT_TOKEN'])
+
+def run_bot():
+    bot.run(os.environ['DISCORD_MUSIC_BOT_TOKEN'])
