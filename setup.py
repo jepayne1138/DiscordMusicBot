@@ -26,8 +26,8 @@ setup(
     download_url='{GITHUB_URL}/tarball/{VERSION}'.format(**locals()),
     keywords='',
     install_requires=[
-        'requests[security]==2.10.0',
-        'six==1.10.0',
+        'discord.py[voice]==0.16.6',
+        'youtube-dl==2017.2.24.1',
     ],
     classifiers=[
         'Programming Language :: Python',
