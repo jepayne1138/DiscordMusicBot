@@ -1,6 +1,7 @@
 import os
 import asyncio
 import discord
+import math
 from discord.ext import commands
 
 COMMAND_CHAR = '/'
@@ -210,8 +211,11 @@ class Music:
     async def skip(self, ctx):
         """Vote to skip a song. The song requester can automatically skip.
 
-        3 skip votes are needed for the song to be skipped.
+        50% skip votes are needed for the song to be skipped.
         """
+
+        skip_percent = 0.5
+        needed_to_skip = math.ceil((len(ctx.message.author.voice_channel.voice_members) - 1) * skip_percent)
 
         state = self.get_voice_state(ctx.message.server)
         if not state.is_playing():
@@ -226,11 +230,11 @@ class Music:
         elif voter.id not in state.skip_votes:
             state.skip_votes.add(voter.id)
             total_votes = len(state.skip_votes)
-            if total_votes >= 3:
+            if total_votes >= needed_to_skip:
                 await self.bot.say('Skip vote passed, skipping song...')
                 state.skip()
             else:
-                await self.bot.say('Skip vote added, currently at [{}/3]'.format(total_votes))
+                await self.bot.say('Skip vote added, currently at [{}/{}]'.format(total_votes, needed_to_skip))
         else:
             await self.bot.say('You have already voted to skip this song.')
         await self.bot.delete_message(ctx.message)
@@ -249,7 +253,7 @@ class Music:
 
     @commands.command(pass_context=True, no_pm=True)
     async def purge(self, ctx, *, limit: str):
-        """Clears the last 5 messages the bot sent"""
+        """Clears the last 'x' messages the bot sent. Use: /purge x or /purge all"""
         PURGE_LIMIT = 1000
         channel = ctx.message.channel
         int_limit = PURGE_LIMIT
