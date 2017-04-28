@@ -64,6 +64,8 @@ class VoiceState:
         while True:
             self.play_next_song.clear()
             self.current = await self.songs.get()
+            print(self.current.player.url)
+            self.current.player = await self.voice.create_ytdl_player(self.current.player.url, ytdl_options=self.opts, after=self.toggle_next)
             await self.bot.send_message(self.current.channel, 'Now playing ' + str(self.current))
             self.current.player.start()
             await self.play_next_song.wait()
@@ -161,7 +163,7 @@ class Music:
             fmt = 'An error occurred while processing this request: ```py\n{}: {}\n```'
             await self.bot.send_message(ctx.message.channel, fmt.format(type(e).__name__, e))
         else:
-            player.volume = 0.6
+            player.volume = 1
             entry = VoiceEntry(ctx.message, player)
             if (state.is_playing() or not state.songs.empty()):
                 await self.bot.say('Enqueued ' + str(entry))

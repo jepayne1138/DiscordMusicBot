@@ -27,7 +27,7 @@ setup(
     keywords='',
     install_requires=[
         'discord.py[voice]==0.16.6',
-        'youtube-dl==2017.2.24.1',
+        'youtube-dl',
     ],
     classifiers=[
         'Programming Language :: Python',
